@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mortgage-postgres
+    environment:
+      POSTGRES_USER: mortgage_user
+      POSTGRES_PASSWORD: mortgage_pass_2024
+      POSTGRES_DB: mortgage_docs
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mortgage_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: mortgage-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://mortgage_user:mortgage_pass_2024@postgres:5432/mortgage_docs
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    volumes:
+      - ./data:/app/data
+      - ./core:/app/core
+      - ./api:/app/api
+      - ./database:/app/database
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
