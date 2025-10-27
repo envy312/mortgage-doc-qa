@@ -230,23 +230,8 @@ The system automatically classifies 23+ mortgage-related document types:
 
 **Other**: Credit Report, Gift Letter, Insurance Policy, Resume, Employment Contract
 
-## Troubleshooting
 
-### Common Issues
 
-**1. Docker build fails with memory error**:
-- Increase Docker memory limit to 8GB in Docker Desktop settings
-
-**2. PostgreSQL connection refused**:
-```bash
-docker ps  # Check if containers are running
-docker logs mortgage-postgres  # Check database logs
-docker-compose restart postgres  # Restart database
-```
-
-3. API returns 500 error on upload:
-- Check if GROQ_API_KEY is set correctly in .env
-- Verify PDF file is not corrupted
 
  License
 
